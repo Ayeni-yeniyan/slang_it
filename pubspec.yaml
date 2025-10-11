@@ -1,0 +1,33 @@
+name: slang_it
+description: CLI tool for automatic localization extraction and code transformation for slang. Write slang_it.key'text' and it automatically becomes t.key.
+version: 0.0.1
+repository: https://github.com/Ayeni-yeniyan/slang_it
+issue_tracker: https://github.com/Ayeni-yeniyan/slang_it/issues
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+topics:
+  - cli
+  - developer-tools
+  - localization
+  - i18n
+  - code-generation
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+# Runtime dependencies (needed when the CLI runs)
+dependencies:
+  path: ^1.8.0
+  yaml: ^3.1.0
+  watcher: ^1.1.0
+  args: ^2.4.0
+  logger: ^2.6.2
+
+# Development dependencies (only for developing slang_it itself)
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.24.0
+
+# This makes 'dart run slang_it' work
+executables:
+  slang_it:

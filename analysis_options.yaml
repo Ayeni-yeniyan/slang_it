@@ -1,0 +1,200 @@
+# analysis_options.yaml
+# Defines a set of lint rules and analysis options for the slang_it package
+# This ensures code quality, consistency, and catches potential issues early
+
+# Include the recommended lint rules from the Dart team
+include: package:lints/recommended.yaml
+
+# Analyzer configuration
+analyzer:
+  # Treat missing required parameters as errors
+  errors:
+    
+    # Using print in production code is a warning
+    # (We're using logging package instead)
+    avoid_print: warning
+    
+    # Missing required parameters is an error
+    missing_required_param: error
+    
+    # Missing return statement is an error
+    missing_return: error
+    
+    # Dead code is a warning
+    dead_code: warning
+    
+    # Unused imports are warnings
+    unused_import: warning
+    
+    # Unused local variables are info (less severe)
+    unused_local_variable: info
+    
+  # Exclude generated files and build outputs from analysis
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/generated/**"
+    - "build/**"
+    - ".dart_tool/**"
+
+# Linter rules
+linter:
+  rules:
+    # === Style Rules ===
+    
+    # Always declare return types for functions
+    # Good: String getName() { ... }
+    # Bad:  getName() { ... }
+    - always_declare_return_types
+  
+    
+    # Require trailing commas for better diffs
+    # Good: MyWidget(child: Text('Hello'),)
+    - require_trailing_commas
+    
+    # Use single quotes for strings
+    # Good: 'hello'
+    # Bad:  "hello"
+    - prefer_single_quotes
+    
+    # Prefer relative imports for files in lib/
+    # Good: import 'config.dart';
+    # Bad:  import 'package:slang_it/src/config.dart';
+    - prefer_relative_imports
+    
+    # Use const constructors when possible
+    - prefer_const_constructors
+    - prefer_const_declarations
+    - prefer_const_literals_to_create_immutables
+    
+    # Prefer final for variables that aren't reassigned
+    - prefer_final_locals
+    - prefer_final_fields
+    - prefer_final_in_for_each
+    
+    # === Documentation Rules ===
+  
+    
+    # Use /// for documentation comments (not /**)
+    - slash_for_doc_comments
+    
+    
+    # === Error Prevention ===
+    
+    # Avoid using print in production code
+    # (Use logging package instead)
+    - avoid_print
+    
+    # Avoid slow async operations in loops
+    - avoid_slow_async_io
+    
+    # Avoid empty catch blocks
+    - avoid_empty_else
+    
+    # Always override hashCode when overriding ==
+    - hash_and_equals
+    
+    
+    # Use key in widget constructors
+    - use_key_in_widget_constructors
+    
+    # Prefer typing uninitialized variables
+    - prefer_typing_uninitialized_variables
+ 
+    # === Code Quality ===
+    
+    # Prefer is and is! over direct type checks
+    - prefer_is_empty
+    - prefer_is_not_empty
+    - prefer_is_not_operator
+    
+    # Use interpolation for strings
+    # Good: 'Hello $name'
+    # Bad:  'Hello ' + name
+    - prefer_interpolation_to_compose_strings
+    
+    # Prefer ?? operator over ternary
+    # Good: value ?? 'default'
+    # Bad:  value != null ? value : 'default'
+    - prefer_if_null_operators
+    
+    # Use adjacent strings for multiline
+    - prefer_adjacent_string_concatenation
+    
+    # Avoid unnecessary containers
+    - avoid_unnecessary_containers
+    
+    # Prefer void for callbacks that don't return
+    - prefer_void_to_null
+    
+    # === Formatting ===
+    
+    # Require curly braces for control flow
+    # Good: if (condition) { ... }
+    # Bad:  if (condition) ...
+    - curly_braces_in_flow_control_structures
+    
+    # Use collection literals
+    # Good: <String>[]
+    # Bad:  List<String>()
+    - prefer_collection_literals
+    
+    # Prefer spread collections
+    - prefer_spread_collections
+    
+    # Use if/for in collections
+    - prefer_if_elements_to_conditional_expressions
+    - prefer_for_elements_to_map_fromIterable
+    
+    # === Null Safety ===
+    
+    # Avoid null check on null
+    - avoid_null_checks_in_equality_operators
+    
+    # Use late instead of nullable when appropriate
+    - unnecessary_late
+    
+    # Avoid redundant null checks
+    - unnecessary_null_checks
+    - unnecessary_nullable_for_final_variable_declarations
+    
+    # === Dart Best Practices ===
+    
+    # Annotate overridden members
+    - annotate_overrides
+    
+    # Avoid relative lib imports
+    - avoid_relative_lib_imports
+    
+    # Use rethrow to rethrow caught exceptions
+    - use_rethrow_when_possible
+    
+    # Prefer function declarations over lambdas
+    - prefer_function_declarations_over_variables
+    
+    # Use raw strings for regex
+    - use_raw_strings
+    
+    # Avoid renaming to the same name
+    - unnecessary_brace_in_string_interps
+    
+    # === Performance ===
+  
+    
+    # Use string buffers for concatenation
+    - use_string_buffers
+    
+    # === Security & Safety ===
+    
+    # Avoid dynamic calls when possible
+    - avoid_dynamic_calls
+    
+    # Avoid catching Error (catch Exception instead)
+    - avoid_catching_errors
+    
+    # Use secure random for security
+    - avoid_web_libraries_in_flutter
+
+# Format configuration (used by dart format)
+# Line length (default is 80, we use 100 for better readability)
+line_length: 100

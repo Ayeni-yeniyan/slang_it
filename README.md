@@ -1,11 +1,11 @@
 # slang_it
 
-A CLI tool for automatic localization extraction and code transformation for [slang](https://pub.dev/packages/slang). Write your translations inline with `slang_it.key'text'` and watch them automatically transform into type-safe `t.key` calls.
+A CLI tool for automatic localization text extraction and code transformation for [slang](https://pub.dev/packages/slang). Write your translations inline with `slang_it.key'text'` and watch them automatically transform into type-safe `t.key` calls.
 
 ## Features
 
-- **Inline Translation Writing**: Write translations directly in your code using `slang_it.key'text'` syntax
-- **Automatic Extraction**: Automatically extracts translations to JSON files
+- **Inline Translation Writing**: Write translation texts directly in your code using `slang_it.key'text'` syntax
+- **Automatic Extraction**: Automatically extracts translation texts to JSON files
 - **Code Transformation**: Transforms `slang_it.key'text'` to `t.key` after extraction
 - **Watch Mode**: Continuously monitors file changes and processes them automatically
 - **Nested Keys**: Supports nested translation keys like `slang_it.settings.profile.name'Name'`
@@ -32,7 +32,25 @@ dev_dependencies:
   build_runner: ^2.4.0
 ```
 
-2. Run slang once to initialize:
+2. Create a `slang.yaml` file in your project root:
+
+```yaml
+base_locale: en
+fallback_strategy: base_locale
+input_directory: lib/i18n
+input_file_pattern: .i18n.json
+output_directory: lib/i18n
+output_file_name: strings.g.dart
+translate_var: t
+```
+
+3. Create the i18n directory:
+
+```bash
+mkdir -p lib/i18n
+```
+
+4. Run slang once to initialize:
 
 ```bash
 dart run slang
@@ -289,3 +307,5 @@ Found a bug or want to contribute? Please open an issue or pull request on [GitH
 
 - **Issues**: Report bugs or request features on GitHub
 - **Discussions**: Ask questions and share tips in GitHub 
+
+> AI generated docs for education

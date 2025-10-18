@@ -75,40 +75,37 @@ class UntranslatedDartFile extends StatelessWidget {
         assert(File('lib/i18n/en.i18n.json').existsSync());
       },
     );
+    test(
+      'slangItProcess runs on for single file',
+      () async {
+        // Arrange
+        final testFile = File(testFilesPathList.first);
+        // Act
+        await processer.processFile(testFile);
+        testFile.writeAsStringSync('''
 
-//     test(
-//       'transformFile skips write on unchanged file',
-//       () async {
-//         // Arrange
-//         final testFile = File('test/helpers/untranslated_file.dart');
-//         testFiles.add(testFile);
-//         await testFile.parent.create(recursive: true);
-//         await testFile.writeAsString('''
-// import 'package:flutter/material.dart';
-// import '../../lib/i18n/strings.g.dart';
+import 'package:flutter/material.dart';
 
-// class UntranslatedDartFile extends StatelessWidget {
-//   const UntranslatedDartFile({super.key});
+class UntranslatedDartFile extends StatelessWidget {
+  const UntranslatedDartFile({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return  Column(children: [
-//       Text(t.untranslated.header),
-//       Text(t.untranslated.subheading),
-//       Text(t.untranslated.settings.heading),
-//     ],);
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return  Column(children: [
+      Text(slang_it.untranslated.header'header text'),
+      Text(slang_it.untranslated.subheading'subheadding text'),
+      Text(slang_it.untranslated.settings.heading'settings heading'),
+      Text(slang_it.untranslated.newKey'new translation from watch'),
+    ],);
+  }
+}
 
-// ''');
-//         final expectedResult = testFile.readAsStringSync();
+''');
 
-//         // Act
-//         await transformer.transformFile(testFile);
-//         final result = testFile.readAsStringSync();
-//         // Assert
-//         expect(result, equals(expectedResult));
-//       },
-//     );
+        await processer.processFile(testFile);
+        // Assert
+        assert(File('lib/i18n/en.i18n.json').existsSync());
+      },
+    );
   });
 }

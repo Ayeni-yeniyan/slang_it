@@ -13,6 +13,8 @@
     "h3eader": "header text 3",
     "sub3heading": "subheadding text",
     "h4eader": "header text 4",
-    "sub4heading": "subheadding text"
+    "sub4heading": "subheadding text",
+    "subheading": "subheadding text",
+    "newKey": "new translation from watch"
   }
 }

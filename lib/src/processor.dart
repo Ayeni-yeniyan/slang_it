@@ -234,6 +234,8 @@ class SlangItProcessor {
     return files;
   }
 
+  Future<void> processFile(File file) => _processFile(file);
+
   /// Check if a file path should be excluded from processing
   ///
   /// Returns true if the path matches any of the exclude patterns

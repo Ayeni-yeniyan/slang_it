@@ -1,0 +1,18 @@
+{
+  "untranslated": {
+    "header": "header text",
+    "h0eader": "header text 0",
+    "sub0heading": "subheadding text",
+    "settings": {
+      "heading": "settings heading"
+    },
+    "h1eader": "header text 1",
+    "sub1heading": "subheadding text",
+    "h2eader": "header text 2",
+    "sub2heading": "subheadding text",
+    "h3eader": "header text 3",
+    "sub3heading": "subheadding text",
+    "h4eader": "header text 4",
+    "sub4heading": "subheadding text"
+  }
+}

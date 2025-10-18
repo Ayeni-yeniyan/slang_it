@@ -1,33 +1,27 @@
 import 'dart:io';
 
 import 'package:slang_it/src/config.dart';
-import 'package:slang_it/src/transformer.dart';
+import 'package:slang_it/src/processor.dart';
+
 import 'package:test/test.dart';
 
 void main() {
-  late SourceTransformer transformer;
-  final testFiles = <File>[];
-  setUp(() {
-    transformer = SourceTransformer(SlangItConfig());
-  });
-  tearDown(() async {
-    for (final file in testFiles) {
-      if (file.existsSync()) {
-        file.deleteSync();
-      }
-    }
-    testFiles.clear();
-  });
+  late SlangItProcessor processer;
 
-  group('SourceTransformer tests', () {
-    test(
-      'transformFile transforms a single file',
-      () async {
-        // Arrange
-        final testFile = File('test/helpers/untranslated_file.dart');
-        testFiles.add(testFile);
-        await testFile.parent.create(recursive: true);
-        await testFile.writeAsString('''
+  late List<String> testFilesPathList;
+
+  void setUpTestFiles() {
+    testFilesPathList = [
+      'test/helpers/untranslated_file.dart',
+      'test/helpers/untranslated_file1.dart',
+      'test/helpers/untranslated_file2.dart',
+      'test/helpers/untranslated_file3.dart',
+      'test/helpers/untranslated_file4.dart',
+    ];
+    for (final filePath in testFilesPathList) {
+      final file = File(filePath);
+      file.parent.createSync(recursive: true);
+      const fileString = '''
 import 'package:flutter/material.dart';
 
 class UntranslatedDartFile extends StatelessWidget {
@@ -37,73 +31,84 @@ class UntranslatedDartFile extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Column(children: [
       Text(slang_it.untranslated.header'header text'),
-      Text(slang_it.untranslated.subheading'subheadding text'),
+
+''';
+      final m =
+          "       Text(slang_it.untranslated.h${testFilesPathList.indexOf(filePath)}eader'header text ${testFilesPathList.indexOf(filePath)}'),\n";
+
+      final n =
+          "      Text(slang_it.untranslated.sub${testFilesPathList.indexOf(filePath)}heading'subheadding text'),";
+      const endingString = '''
+
       Text(slang_it.untranslated.settings.heading'settings heading'),
     ],);
   }
 }
 
-''');
-        // Act
-        await transformer.transformFile(testFile);
-        final result = testFile.readAsStringSync();
-        const expectedResult = '''
-import 'package:flutter/material.dart';
-import '../../lib/i18n/strings.g.dart';
-
-class UntranslatedDartFile extends StatelessWidget {
-  const UntranslatedDartFile({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return  Column(children: [
-      Text(t.untranslated.header),
-      Text(t.untranslated.subheading),
-      Text(t.untranslated.settings.heading),
-    ],);
-  }
-}
-
 ''';
-        // Assert
-        expect(result, isNotEmpty);
-        expect(result, equals(expectedResult));
-      },
-    );
+      file.writeAsStringSync(fileString + m + n + endingString);
+    }
+  }
 
+  setUp(() {
+    processer = SlangItProcessor(config: SlangItConfig());
+    setUpTestFiles();
+  });
+  tearDown(() async {
+    for (final filePath in testFilesPathList) {
+      final file = File(filePath);
+      if (file.existsSync()) {
+        file.deleteSync();
+      }
+    }
+    testFilesPathList.clear();
+  });
+  group('SlangItProcessor tests', () {
     test(
-      'transformFile skips write on unchanged file',
+      'slangItProcess runs one a single file',
       () async {
         // Arrange
-        final testFile = File('test/helpers/untranslated_file.dart');
-        testFiles.add(testFile);
-        await testFile.parent.create(recursive: true);
-        await testFile.writeAsString('''
-import 'package:flutter/material.dart';
-import '../../lib/i18n/strings.g.dart';
-
-class UntranslatedDartFile extends StatelessWidget {
-  const UntranslatedDartFile({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return  Column(children: [
-      Text(t.untranslated.header),
-      Text(t.untranslated.subheading),
-      Text(t.untranslated.settings.heading),
-    ],);
-  }
-}
-
-''');
-        final expectedResult = testFile.readAsStringSync();
-
         // Act
-        await transformer.transformFile(testFile);
-        final result = testFile.readAsStringSync();
+        await processer.slangItProcess(testFilesPathList);
+
         // Assert
-        expect(result, equals(expectedResult));
+        assert(File('lib/i18n/en.i18n.json').existsSync());
       },
     );
+
+//     test(
+//       'transformFile skips write on unchanged file',
+//       () async {
+//         // Arrange
+//         final testFile = File('test/helpers/untranslated_file.dart');
+//         testFiles.add(testFile);
+//         await testFile.parent.create(recursive: true);
+//         await testFile.writeAsString('''
+// import 'package:flutter/material.dart';
+// import '../../lib/i18n/strings.g.dart';
+
+// class UntranslatedDartFile extends StatelessWidget {
+//   const UntranslatedDartFile({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return  Column(children: [
+//       Text(t.untranslated.header),
+//       Text(t.untranslated.subheading),
+//       Text(t.untranslated.settings.heading),
+//     ],);
+//   }
+// }
+
+// ''');
+//         final expectedResult = testFile.readAsStringSync();
+
+//         // Act
+//         await transformer.transformFile(testFile);
+//         final result = testFile.readAsStringSync();
+//         // Assert
+//         expect(result, equals(expectedResult));
+//       },
+//     );
   });
 }

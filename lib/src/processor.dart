@@ -59,7 +59,7 @@ class SlangItProcessor {
     // Extract translations from all files
     final extractor = TranslationExtractor(config);
 
-    final translations = <String, dynamic>{};
+    Map<String, dynamic> translations = <String, dynamic>{};
 
     // Track which files actually contain translations (for transformation step)
     final filesWithTranslations = <File>[];
@@ -68,16 +68,15 @@ class SlangItProcessor {
     for (final file in files) {
       // Extract returns a map of translations found in this specific file
       final extracted = await extractor.extractFromFile(file);
-
       // If this file has translations, track it for later transformation
       if (extracted.isNotEmpty) {
         filesWithTranslations.add(file);
-        _deepMerge(translations, extracted);
+        translations = _deepMerge(translations, extracted);
       }
     }
 
     if (translations.isEmpty) {
-      _logger.w('✨There is nothing to slang_it, damn it!');
+      _logger.w('There is nothing to slang_it, damn it!');
       return;
     }
 
@@ -348,9 +347,12 @@ class SlangItProcessor {
     Map<String, dynamic> existingMap,
     Map<String, dynamic> newValuesMap,
   ) {
+    _logger.i('Starting deep merge of $newValuesMap into $existingMap');
     // Create a copy of target to avoid modifying the original
     final result = Map<String, dynamic>.from(existingMap);
-
+    if (existingMap.isEmpty) {
+      return newValuesMap;
+    }
     // Process each key-value pair in the source map
     newValuesMap.forEach((key, value) {
       // If both target and source have this key and both are maps,

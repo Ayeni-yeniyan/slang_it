@@ -3,7 +3,8 @@ description: CLI tool for automatic localization extraction and code transformat
 version: 0.0.1
 repository: https://github.com/Ayeni-yeniyan/slang_it
 issue_tracker: https://github.com/Ayeni-yeniyan/slang_it/issues
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+homepage: https://github.com/Ayeni-yeniyan/slang_it
+documentation: https://github.com/Ayeni-yeniyan/slang_it#readme
 
 topics:
   - cli
@@ -32,3 +33,11 @@ dev_dependencies:
 
 executables:
   slang_it:
+
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  web:
+  windows:

@@ -65,7 +65,7 @@ class UntranslatedDartFile extends StatelessWidget {
   });
   group('SlangItProcessor tests', () {
     test(
-      'slangItProcess runs one a single file',
+      'slangItProcess runs for multiple files',
       () async {
         // Arrange
         // Act

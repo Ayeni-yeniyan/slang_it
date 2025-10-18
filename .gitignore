@@ -1,4 +1,4 @@
 /build
 /coverage
 /test/helpers
-/.dart_tool/pub/bin
+/.dart_tool

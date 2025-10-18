@@ -32,25 +32,7 @@ dev_dependencies:
   build_runner: ^2.4.0
 ```
 
-2. Create a `slang.yaml` file in your project root:
-
-```yaml
-base_locale: en
-fallback_strategy: base_locale
-input_directory: lib/i18n
-input_file_pattern: .i18n.json
-output_directory: lib/i18n
-output_file_name: strings.g.dart
-translate_var: t
-```
-
-3. Create the i18n directory:
-
-```bash
-mkdir -p lib/i18n
-```
-
-4. Run slang once to initialize:
+2. Run slang once to initialize:
 
 ```bash
 dart run slang

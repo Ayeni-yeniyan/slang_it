@@ -49,8 +49,12 @@ class TranslationExtractor {
   /// ```
   Future<Map<String, dynamic>> extractFromFile(File file) async {
     _logger.i('Extracting from file: ${file.path}');
-    final content = await file.readAsString();
-    return extractFromContent(content);
+    if (file.existsSync()) {
+      final content = await file.readAsString();
+      return extractFromContent(content);
+    }
+    _logger.w('File does not exist');
+    return {};
   }
 
   /// Extract translations from content string
@@ -146,16 +150,13 @@ class TranslationExtractor {
       //
       // Replacements performed:
       // 1. \' → ' (escaped single quote becomes single quote)
-      // 2. \" → " (escaped double quote becomes double quote)
-      // 3. \\ → \ (escaped backslash becomes single backslash)
+      // 2. \\ → \ (escaped backslash becomes single backslash)
       //
       // Example transformations:
       // - "It\'s working!" → "It's working!"
-      // - "Say \"Hello\"" → "Say "Hello""
       // - "Path: C:\\Users" → "Path: C:\Users"
       final unescapedValue = value
           .replaceAll(r"\'", "'") // Replace \' with '
-          .replaceAll(r'\"', '"') // Replace \" with "
           .replaceAll(r'\\', r'\'); // Replace \\ with \
 
       if (unescapedValue != value) {

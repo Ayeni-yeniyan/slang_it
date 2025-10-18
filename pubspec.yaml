@@ -29,6 +29,8 @@ dev_dependencies:
   lints: ^2.0.0
   test: ^1.24.0
   coverage: ^1.7.0
-# This makes 'dart run slang_it' work
+  flutter:
+    sdk: flutter
+
 executables:
   slang_it:

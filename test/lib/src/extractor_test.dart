@@ -6,18 +6,31 @@ import 'package:test/test.dart';
 
 void main() {
   late TranslationExtractor extractor;
+  final testFiles = <File>[];
+
   setUp(() {
     extractor = TranslationExtractor(SlangItConfig());
   });
+
+  tearDown(() async {
+    for (final file in testFiles) {
+      if (file.existsSync()) {
+        file.deleteSync();
+      }
+    }
+    testFiles.clear();
+  });
+
   group('TranslationExtractor tests', () {
     test(
       'extractFromFile reads file and extracts translations',
       () async {
         // Arrange
         final testFile = File('test/helpers/untranslated_file.dart');
+        testFiles.add(testFile);
 
-        await testFile.parent.create(recursive: true);
-        await testFile.writeAsString('''
+        testFile.parent.createSync(recursive: true);
+        testFile.writeAsStringSync('''
 import 'package:flutter/material.dart';
 
 class UntranslatedDartFile extends StatelessWidget {
@@ -70,6 +83,7 @@ class UntranslatedDartFile extends StatelessWidget {
       () async {
         // Arrange
         final testFile = File('test/helpers/untranslated2_file.dart');
+        testFiles.add(testFile);
 
         await testFile.parent.create(recursive: true);
         await testFile.writeAsString('''

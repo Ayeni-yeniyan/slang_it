@@ -24,6 +24,8 @@ jobs:
       # - uses: dart-lang/setup-dart@v1
       - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
 
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
       - name: Install dependencies
         run: dart pub get
         working-directory: .
@@ -41,3 +43,7 @@ jobs:
       # want to change this to 'flutter test'.
       - name: Run tests
         run: dart test
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: coverage/lcov.info

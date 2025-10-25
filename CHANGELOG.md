@@ -52,6 +52,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for both single and double quoted strings
 - Proper escaping/unescaping of special characters
 
+
+## [0.0.2] - TBD
+
+### Added
+- Multi-locale file update support - automatically updates translation files for multiple locales simultaneously
+
 ## [1.0.0] - TBD
 
 ## [1.1.0] - TBD

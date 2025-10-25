@@ -294,7 +294,7 @@ class SlangItProcessor {
   ) async {
     if (config.locales.isNotEmpty) {
       for (final locale in config.locales) {
-        _updateJsonFile(newTranslations, locale);
+        await _updateJsonFile(newTranslations, locale);
       }
     }
   }

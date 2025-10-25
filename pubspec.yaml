@@ -1,6 +1,6 @@
 name: slang_it
 description: CLI tool for automatic localization extraction and code transformation for slang. Write slang_it.key'text' and it automatically becomes t.key.
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/Ayeni-yeniyan/slang_it
 issue_tracker: https://github.com/Ayeni-yeniyan/slang_it/issues
 homepage: https://github.com/Ayeni-yeniyan/slang_it

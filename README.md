@@ -66,9 +66,7 @@ Add slang_it to your `pubspec.yaml`:
 
 ```yaml
 dev_dependencies:
-  slang_it:
-    git:
-      url: https://github.com/Ayeni-yeniyan/slang_it.git
+  slang_it: ^0.0.2
 ```
 
 Then install dependencies:
@@ -87,8 +85,10 @@ Create a `slang_it.yaml` file in your project root:
 # Directory where i18n files are located
 i18n_dir: lib/i18n
 
-# Base locale
-locale: en
+# Supported locales
+locales: 
+  - en
+  - es
 
 # Generated translation file name (created by slang)
 translation_file: strings.g.dart
@@ -308,4 +308,4 @@ Found a bug or want to contribute? Please open an issue or pull request on [GitH
 - **Issues**: Report bugs or request features on GitHub
 - **Discussions**: Ask questions and share tips in GitHub 
 
-> AI generated docs for education
+> **AI generated docs**

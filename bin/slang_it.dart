@@ -55,7 +55,7 @@ void main(List<String> arguments) async {
 
     if (results['watch'] as bool) {
       logger.i('👀 Watch mode enabled. Press Ctrl+C to stop.\n');
-      await processor.watch(paths);
+      await processor.slangItWatch(paths);
     } else {
       await processor.slangItProcess(paths);
     }

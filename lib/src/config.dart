@@ -6,18 +6,16 @@ import 'package:yaml/yaml.dart';
 /// Configuration object containing all user settings (paths, patterns, etc.)
 class SlangItConfig {
   final String i18nDir;
-  final String locale;
+  final List<String> locales, include, exclude;
   final String translationFile;
   final String pattern;
-  final List<String> include;
-  final List<String> exclude;
   final bool runSlangAfter;
   final bool preserveFormatting;
   late TranslationFileType translationFileType;
 
   SlangItConfig({
     this.i18nDir = 'lib/i18n',
-    this.locale = 'en',
+    this.locales = const ['en'],
     this.translationFile = 'strings.g.dart',
     this.pattern = 'slang_it',
     List<String>? include,
@@ -109,7 +107,9 @@ class SlangItConfig {
 
       return SlangItConfig(
         i18nDir: yaml['i18n_dir'] as String? ?? 'lib/i18n',
-        locale: yaml['locale'] as String? ?? 'en',
+        locales:
+            (yaml['locales'] as YamlList?)?.map((e) => e.toString()).toList() ??
+                ['en'],
         translationFile:
             yaml['translation_file'] as String? ?? 'strings.g.dart',
         pattern: yaml['pattern'] as String? ?? 'slang_it',
@@ -140,7 +140,9 @@ class SlangItConfig {
 i18n_dir: lib/i18n
 
 # Base locale
-locale: en
+locales:
+  - en
+  - es
 
 # Generated translation file name (created by slang)
 translation_file: strings.g.dart

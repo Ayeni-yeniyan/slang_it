@@ -97,7 +97,6 @@ class SlangItProcessor {
       // Prompt user for yes/no response
       stdout.write('Continue with extraction and transformation? [y/n] ');
       final response = stdin.readLineSync();
-
       // If user doesn't explicitly say yes, cancel the operation
       if (response?.toLowerCase() != 'y') {
         _logger.f(' slang_it process cancelled by user');
@@ -133,7 +132,7 @@ class SlangItProcessor {
   ///
   /// This is useful during development so translations are automatically
   /// extracted and code is transformed as you work.
-  Future<void> watch(List<String> paths) async {
+  Future<void> slangItWatch(List<String> paths) async {
     // Do an initial full processing run before starting to watch
     await slangItProcess(paths);
 
@@ -252,10 +251,13 @@ class SlangItProcessor {
   ///
   /// This merges new translations with existing ones, preserving any
   /// manual edits users may have made to the JSON file.
-  Future<void> _updateJsonFile(Map<String, dynamic> newTranslations) async {
+  Future<void> _updateJsonFile(
+    Map<String, dynamic> newTranslations,
+    String locale,
+  ) async {
     // Build the full path to the JSON file
     // Example: lib/i18n/en.i18n.json
-    final jsonPath = p.join(config.i18nDir, '${config.locale}.i18n.json');
+    final jsonPath = p.join(config.i18nDir, '$locale.i18n.json');
     final jsonFile = File(jsonPath);
 
     // Load existing translations if the file already exists
@@ -285,6 +287,16 @@ class SlangItProcessor {
 
     // Inform user that JSON was updated
     _logger.i('📝 Updated translation $jsonPath');
+  }
+
+  Future<void> _updateAllJsonFiles(
+    Map<String, dynamic> newTranslations,
+  ) async {
+    if (config.locales.isNotEmpty) {
+      for (final locale in config.locales) {
+        _updateJsonFile(newTranslations, locale);
+      }
+    }
   }
 
   /// Run the 'dart run slang' command to generate translation code
@@ -400,7 +412,7 @@ class SlangItProcessor {
   Future<void> _updateTranslationFile(Map<String, dynamic> newTranslations) {
     switch (config.translationFileType) {
       case TranslationFileType.json:
-        return _updateJsonFile(newTranslations);
+        return _updateAllJsonFiles(newTranslations);
       // Add other cases here for different file types (csv, arb, etc.)
       // case TranslationFileType.csv:
       //   return _updateCsvFile(newTranslations);

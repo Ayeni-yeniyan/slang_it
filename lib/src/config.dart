@@ -5,12 +5,9 @@ import 'package:yaml/yaml.dart';
 
 /// Configuration object containing all user settings (paths, patterns, etc.)
 class SlangItConfig {
-  final String i18nDir;
+  final String i18nDir, translationFile, pattern;
   final List<String> locales, include, exclude;
-  final String translationFile;
-  final String pattern;
-  final bool runSlangAfter;
-  final bool preserveFormatting;
+  final bool runSlangAfter, preserveFormatting, useAbsolutePath;
   late TranslationFileType translationFileType;
 
   SlangItConfig({
@@ -22,6 +19,7 @@ class SlangItConfig {
     List<String>? exclude,
     this.runSlangAfter = true,
     this.preserveFormatting = true,
+    this.useAbsolutePath = true,
     String translationFilename = 'json',
   })  : include = include ?? <String>['lib/**/*.dart'],
         exclude = exclude ??
@@ -94,7 +92,7 @@ class SlangItConfig {
   }
 
   /// Load configuration from YAML file
-  static Future<SlangItConfig> load(String configPath) async {
+  factory SlangItConfig.load(String configPath) {
     final File file = File(configPath);
 
     // Use defaults if config file doesn't exist
@@ -119,6 +117,7 @@ class SlangItConfig {
             (yaml['exclude'] as YamlList?)?.map((e) => e.toString()).toList(),
         runSlangAfter: yaml['run_slang_after'] as bool? ?? true,
         preserveFormatting: yaml['preserve_formatting'] as bool? ?? true,
+        useAbsolutePath: yaml['use_absolute_path'] as bool? ?? true,
       );
     } catch (e) {
       ('⚠️  Warning: Failed to parse config file, using defaults: $e');

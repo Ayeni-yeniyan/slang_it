@@ -112,6 +112,9 @@ run_slang_after: true
 
 # Preserve code formatting and comments
 preserve_formatting: true
+
+# Use absolute path otherwise use relative path. Formats the used path to absolute path when true and relative path when false
+use_absolute_path: true
 ```
 
 ## Usage
@@ -130,7 +133,7 @@ class MyHomePage extends StatelessWidget {
       children: [
         Text(slang_it.home.title'Home'),
         Text(slang_it.home.subtitle'Welcome to our app'),
-        Text(slang_it.settings.profile.name'Profile Name'),
+        Text(slang_it.settings.profile.name'Profile Name: ${profile.name}'),
       ],
     );
   }
@@ -156,7 +159,7 @@ class MyHomePage extends StatelessWidget {
       children: [
         Text(t.home.title),
         Text(t.home.subtitle),
-        Text(t.settings.profile.name),
+        Text(t.settings.profile.name(name: profile.name)),
       ],
     );
   }
@@ -173,7 +176,7 @@ And a JSON file is created at `lib/i18n/en.i18n.json`:
   },
   "settings": {
     "profile": {
-      "name": "Profile Name"
+      "name": "Profile Name: ${name}"
     }
   }
 }

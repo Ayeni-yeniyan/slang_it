@@ -1,0 +1,9 @@
+{
+  "untranslated": {
+    "header": "header text",
+    "subheading": "subheadding text",
+    "settings": {
+      "heading": "settings heading ${name}"
+    }
+  }
+}

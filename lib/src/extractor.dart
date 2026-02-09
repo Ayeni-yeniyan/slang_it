@@ -113,7 +113,7 @@ class TranslationExtractor {
 
       // Extract the value from capture group 2
       // Example: For "slang_it.home.title'Home'", value = "Home"
-      final value = match.group(2);
+      final value = _parseValue(match.group(2));
 
       _logger.i(' Extracted - Key: $keyPath, Value: $value');
       // Validate that both key and value are present and not empty
@@ -325,5 +325,46 @@ class TranslationExtractor {
     //   }
     // }
     current.putIfAbsent(keys.last, () => value);
+  }
+
+  /// Parse string and replace nested property access with last property
+  ///
+  /// Example: "header text ${name}" → "header text ${name}"
+  /// Example: "subheading text ${someval.val}" → "subheading text ${val}"
+  String? _parseValue(String? val) {
+    if (val == null) return null;
+    if (!val.contains(r'${')) {
+      return val;
+    }
+
+    final parts = val.split(r'${');
+    if (parts.length == 1) return val;
+
+    final buffer = StringBuffer(parts[0]);
+
+    for (int i = 1; i < parts.length; i++) {
+      final part = parts[i];
+      final closeBraceIndex = part.indexOf('}');
+
+      if (closeBraceIndex == -1) {
+        buffer.write(r'${');
+        buffer.write(part);
+        continue;
+      }
+
+      final expression = part.substring(0, closeBraceIndex);
+      final remainder = part.substring(closeBraceIndex);
+      if (expression.contains('.')) {
+        final lastPart = expression.substring(expression.lastIndexOf('.') + 1);
+        buffer.write(r'${');
+        buffer.write(lastPart);
+      } else {
+        buffer.write(r'${');
+        buffer.write(expression);
+      }
+      buffer.write(remainder);
+    }
+
+    return buffer.toString();
   }
 }

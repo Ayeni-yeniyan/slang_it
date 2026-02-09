@@ -62,7 +62,12 @@ class SourceTransformer {
       // For example, if the match is slang_it.home.title'Home',
       // keyPath will be "home.title"
       final keyPath = match.group(1)!;
-
+      final params = _extractParams(match.group(2));
+      if (params.isNotEmpty) {
+        final joinedParams =
+            params.entries.map((e) => '${e.key}: ${e.value}').join(', ');
+        return 't.$keyPath($joinedParams)';
+      }
       // Return the replacement string: t.{keyPath}
       // The entire matched string (including 'text' part) gets replaced
       // Example: slang_it.home.title'Home' → t.home.title
@@ -75,16 +80,25 @@ class SourceTransformer {
   /// This ensures the 't' variable is available by importing the
   /// generated translations file.
   String _addImportIfNeeded(String content, String filePath) {
-    final importPath = _calculateImportPath(filePath);
+    final (absPath, relativePath) = _calculateImportPath(filePath);
 
     // Build the complete import statement
-    final importStatement = "import '$importPath';";
-
+    final absImportStatement = "import '$absPath';";
+    final relativeImportStatement = "import '$relativePath';";
+    final importStatement =
+        config.useAbsolutePath ? absImportStatement : relativeImportStatement;
     // Check if this exact import already exists in the file
     // If it does, we don't need to add it again
     if (content.contains(importStatement)) {
       // Import already exists - return content unchanged
       return content;
+    } else if (content.contains(relativeImportStatement) ||
+        content.contains(absImportStatement)) {
+      // Replace existing with set path
+      return content.replaceAll(
+        config.useAbsolutePath ? relativeImportStatement : absImportStatement,
+        importStatement,
+      );
     }
 
     // Split the content into lines so we can insert the import at the right place
@@ -110,7 +124,7 @@ class SourceTransformer {
   ///   lib/main.dart          → 'i18n/strings.g.dart'
   ///   lib/screens/home.dart  → '../i18n/strings.g.dart'
   ///   lib/features/auth/login.dart → '../../i18n/strings.g.dart'
-  String _calculateImportPath(String filePath) {
+  (String, String) _calculateImportPath(String filePath) {
     // Get the directory containing this file
     // Example: for lib/screens/home.dart, fileDir = lib/screens
     final fileDir = p.dirname(filePath);
@@ -123,9 +137,10 @@ class SourceTransformer {
     // The 'from' parameter specifies the starting point for the relative path
     // Example: from lib/screens to lib/i18n/strings.g.dart = ../i18n/strings.g.dart
     final relativePath = p.relative(i18nPath, from: fileDir);
+    final absPath = p.absolute(i18nPath);
 
     // Normalize path separators for imports
-    return relativePath.replaceAll(r'\', '/');
+    return (absPath.replaceAll(r'\', '/'), relativePath.replaceAll(r'\', '/'));
   }
 
   /// Find the best location to insert an import statement
@@ -190,5 +205,41 @@ class SourceTransformer {
     // Either there are only imports and no code, or the file is empty
     // In this case, just insert at the beginning (index 0)
     return 0;
+  }
+
+  /// Extract parameters from a string
+  ///
+  /// This method is used to extract parameters from a string that contains
+  /// placeholders in the format `${parameter}`.
+  ///
+  /// The method returns a map of parameters where the keys are the parameter
+  /// names and the values are the parameter values.
+  ///
+  /// Example:
+  /// ```dart
+  /// final params = _extractParams('Hello, ${name}! You are ${age} years old.');
+  /// // params will be {'name': 'name', 'age': 'age'}
+  /// ```
+  Map<String, dynamic> _extractParams(String? val) {
+    if (val == null) return {};
+    if (!val.contains(r'${')) return {};
+    final params = <String, dynamic>{};
+    final parts = val.split(r'${');
+
+    for (int i = 1; i < parts.length; i++) {
+      final part = parts[i];
+      final closeBraceIndex = part.indexOf('}');
+      if (closeBraceIndex == -1) {
+        continue;
+      }
+      final expression = part.substring(0, closeBraceIndex);
+      if (expression.contains('.')) {
+        final lastPart = expression.substring(expression.lastIndexOf('.') + 1);
+        params[lastPart] = expression;
+      } else {
+        params[expression] = expression;
+      }
+    }
+    return params;
   }
 }

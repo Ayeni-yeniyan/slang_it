@@ -53,12 +53,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Proper escaping/unescaping of special characters
 
 
-## [0.0.2] - TBD
+## [0.0.2] - 2025-10-25
 
 ### Added
 - Multi-locale file update support - automatically updates translation files for multiple locales simultaneously
 
-## [1.0.0] - TBD
+## [0.0.3] - 2026-02-09
+
+### Added
+- Parameter extraction from translation strings (e.g., `{name}`,`{count}`)
+- Support absolute/relative path
 
 ## [1.1.0] - TBD
 

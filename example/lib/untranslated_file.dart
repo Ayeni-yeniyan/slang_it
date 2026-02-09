@@ -8,7 +8,7 @@
 //     return  Column(children: [
 //       Text(slang_it.untranslated.header'header text'),
 //       Text(slang_it.untranslated.subheading'subheadding text'),
-//       Text(slang_it.untranslated.settings.heading'settings heading'),
+//       Text(slang_it.untranslated.settings.heading'settings heading ${name}'),
 //     ],);
 //   }
 // }

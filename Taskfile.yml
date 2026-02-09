@@ -1,0 +1,22 @@
+version: '3'
+
+tasks:
+  publish:
+    desc: Publish to pub.dev
+    aliases:
+      - pub
+    preconditions:
+      - task: test
+      - task: format
+    cmds:
+      - dart pub publish
+
+  test:
+    desc: Run tests
+    cmds:
+      - dart test
+
+  format:
+    desc: Format code
+    cmds:
+      - dart format .

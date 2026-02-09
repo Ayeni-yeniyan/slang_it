@@ -106,4 +106,55 @@ class UntranslatedDartFile extends StatelessWidget {
       },
     );
   });
+
+  test(
+    'transformFile transforms strings with dynamic variables',
+    () async {
+      // Arrange
+      final testFile = File('test/helpers/untranslated_file.dart');
+      testFiles.add(testFile);
+      await testFile.parent.create(recursive: true);
+      await testFile.writeAsString(r'''
+import 'package:flutter/material.dart';
+
+class UntranslatedDartFile extends StatelessWidget {
+  const UntranslatedDartFile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return  Column(children: [
+      Text(slang_it.untranslated.header'header text ${name}'),
+      Text(slang_it.untranslated.subheading'subheadding text ${someval.val} ${someval2.val2}'),
+      Text(slang_it.untranslated.settings.heading'settings heading'),
+    ],);
+  }
+}
+
+''');
+      // Act
+      await transformer.transformFile(testFile);
+      final result = testFile.readAsStringSync();
+      const expectedResult = '''
+import 'package:flutter/material.dart';
+import '../../lib/i18n/strings.g.dart';
+
+class UntranslatedDartFile extends StatelessWidget {
+  const UntranslatedDartFile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return  Column(children: [
+      Text(t.untranslated.header(name: name)),
+      Text(t.untranslated.subheading(val: someval.val, val2: someval2.val2)),
+      Text(t.untranslated.settings.heading),
+    ],);
+  }
+}
+
+''';
+      // Assert
+      expect(result, isNotEmpty);
+      expect(result, equals(expectedResult));
+    },
+  );
 }

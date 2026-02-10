@@ -113,8 +113,6 @@ run_slang_after: true
 # Preserve code formatting and comments
 preserve_formatting: true
 
-# Use absolute path otherwise use relative path. Formats the used path to absolute path when true and relative path when false
-use_absolute_path: true
 ```
 
 ## Usage

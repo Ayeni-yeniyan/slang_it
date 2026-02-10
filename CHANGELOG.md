@@ -62,7 +62,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Parameter extraction from translation strings (e.g., `{name}`,`{count}`)
-- Support absolute/relative path
 
 ## [1.1.0] - TBD
 

@@ -80,26 +80,25 @@ class SourceTransformer {
   /// This ensures the 't' variable is available by importing the
   /// generated translations file.
   String _addImportIfNeeded(String content, String filePath) {
-    final (absPath, relativePath) = _calculateImportPath(filePath);
+    final relativePath = _calculateImportPath(filePath);
 
     // Build the complete import statement
-    final absImportStatement = "import '$absPath';";
-    final relativeImportStatement = "import '$relativePath';";
-    final importStatement =
-        config.useAbsolutePath ? absImportStatement : relativeImportStatement;
+    // final absImportStatement = "import '$absPath';";
+    final importStatement = "import '$relativePath';";
     // Check if this exact import already exists in the file
     // If it does, we don't need to add it again
     if (content.contains(importStatement)) {
       // Import already exists - return content unchanged
       return content;
-    } else if (content.contains(relativeImportStatement) ||
-        content.contains(absImportStatement)) {
-      // Replace existing with set path
-      return content.replaceAll(
-        config.useAbsolutePath ? relativeImportStatement : absImportStatement,
-        importStatement,
-      );
     }
+    //  else if (content.contains(relativeImportStatement) ||
+    //     content.contains(absImportStatement)) {
+    //   // Replace existing with set path
+    //   return content.replaceAll(
+    //     config.useAbsolutePath ? relativeImportStatement : absImportStatement,
+    //     importStatement,
+    //   );
+    // }
 
     // Split the content into lines so we can insert the import at the right place
     final lines = content.split('\n');
@@ -124,7 +123,7 @@ class SourceTransformer {
   ///   lib/main.dart          → 'i18n/strings.g.dart'
   ///   lib/screens/home.dart  → '../i18n/strings.g.dart'
   ///   lib/features/auth/login.dart → '../../i18n/strings.g.dart'
-  (String, String) _calculateImportPath(String filePath) {
+  String _calculateImportPath(String filePath) {
     // Get the directory containing this file
     // Example: for lib/screens/home.dart, fileDir = lib/screens
     final fileDir = p.dirname(filePath);
@@ -137,10 +136,10 @@ class SourceTransformer {
     // The 'from' parameter specifies the starting point for the relative path
     // Example: from lib/screens to lib/i18n/strings.g.dart = ../i18n/strings.g.dart
     final relativePath = p.relative(i18nPath, from: fileDir);
-    final absPath = p.absolute(i18nPath);
+    // final absPath = p.absolute(i18nPath);
 
     // Normalize path separators for imports
-    return (absPath.replaceAll(r'\', '/'), relativePath.replaceAll(r'\', '/'));
+    return (relativePath.replaceAll(r'\', '/'));
   }
 
   /// Find the best location to insert an import statement

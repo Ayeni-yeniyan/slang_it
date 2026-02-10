@@ -63,6 +63,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Parameter extraction from translation strings (e.g., `{name}`,`{count}`)
 
+## [0.0.4] - 2026-02-10
+
+### Added
+- Doc updates
+
 ## [1.1.0] - TBD
 
 ### Planned for stable release
@@ -82,26 +87,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Migration tool from existing slang projects
 - Validation command to ensure all keys exist in code
 - Remove unused translations feature
-- Git integration (auto-commit translations)
 - CI/CD integration examples
-
----
-
-## Version History
-
-### How to Upgrade
-
-#### From nothing to 1.0.0
-```bash
-flutter pub add --dev slang_it
-dart run slang_it
-```
-
-### Breaking Changes
-None yet - this is the initial release.
-
-### Deprecations
-None yet.
 
 ---
 

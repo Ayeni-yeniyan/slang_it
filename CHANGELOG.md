@@ -76,8 +76,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Planned Features
-- Multi-locale support (extract to multiple language files)
-- Parameter extraction from translation strings (e.g., `{name}`, `{count}`)
 - Plural support detection
 - Context/gender support
 - IDE plugin for VS Code and IntelliJ
